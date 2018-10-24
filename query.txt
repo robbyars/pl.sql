@@ -289,6 +289,93 @@ END;
 begin getdatacicilan2(147,24,1); end;
 
 
+//procedure insert transaksi
+create or replace procedure inserttransaksiperhiasan(idp in varchar)
+IS
+ cursor e_data is 
+select id_perhiasan,tgl_kedatangan,add_months(tgl_kedatangan,4) as tanggal_jatuhtempo,round((((kadar_emas/24)*berat*671000)*1.70/100)*4, 0) as tafsir_harga from gadai_perhiasan where id_perhiasan = idp;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+insert into transaksi (pengajuan_idp,tanggal_kredit,tanggal_jatuhtempo,tafsir_harga) 
+values (e_rec.id_perhiasan,e_rec.tgl_kedatangan,e_rec.tanggal_jatuhtempo,e_rec.tafsir_harga);
+   dbms_output.put_line('data transaksi gadai berhasil ditambahkan');
+   dbms_output.put_line('ID PENGAJUAN : '||e_rec.id_perhiasan);
+   dbms_output.put_line('TANGGAL KREDIT : '||e_rec.tgl_kedatangan);
+   dbms_output.put_line('TANGGAL JATUH TEMPO : '||e_rec.tanggal_jatuhtempo);
+   dbms_output.put_line('TAFSIR HARGA : '||to_char(e_rec.tafsir_harga, '99,999,999,999.99'));
+   
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin inserttransaksiperhiasan('p-003'); end;
+
+create or replace procedure inserttransaksielektronik(ide in varchar)
+IS
+ cursor e_data is 
+select id_elektronik,tgl_kedatangan,add_months(tgl_kedatangan,4) as tanggal_jatuhtempo,harga_jual_saatini/2 as tafsir_harga from gadai_elektronik where id_elektronik=ide;
+
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+insert into transaksi (pengajuan_ide,tanggal_kredit,tanggal_jatuhtempo,tafsir_harga) 
+values (e_rec.id_elektronik,e_rec.tgl_kedatangan,e_rec.tanggal_jatuhtempo,e_rec.tafsir_harga);
+   dbms_output.put_line('data transaksi gadai berhasil ditambahkan');
+   dbms_output.put_line('ID PENGAJUAN : '||e_rec.id_elektronik);
+   dbms_output.put_line('TANGGAL KREDIT : '||e_rec.tgl_kedatangan);
+   dbms_output.put_line('TANGGAL JATUH TEMPO : '||e_rec.tanggal_jatuhtempo);
+   dbms_output.put_line('TAFSIR HARGA : '||to_char(e_rec.tafsir_harga, '99,999,999,999.99'));
+   
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin inserttransaksielektronik('e-003'); end;
+
+create or replace procedure inserttransaksikendaraan(idk in varchar)
+IS
+ cursor e_data is 
+select id_kendaraan,tgl_kedatangan,add_months(tgl_kedatangan,4) as tanggal_jatuhtempo,harga_jual/2 as tafsir_harga from gadai_kendaraan where id_kendaraan=idk;
+
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+insert into transaksi (pengajuan_idk,tanggal_kredit,tanggal_jatuhtempo,tafsir_harga) 
+values (e_rec.id_kendaraan,e_rec.tgl_kedatangan,e_rec.tanggal_jatuhtempo,e_rec.tafsir_harga);
+   dbms_output.put_line('data transaksi gadai berhasil ditambahkan');
+   dbms_output.put_line('ID PENGAJUAN : '||e_rec.id_kendaraan);
+   dbms_output.put_line('TANGGAL KREDIT : '||e_rec.tgl_kedatangan);
+   dbms_output.put_line('TANGGAL JATUH TEMPO : '||e_rec.tanggal_jatuhtempo);
+   dbms_output.put_line('TAFSIR HARGA : '||to_char(e_rec.tafsir_harga, '99,999,999,999.99'));
+   
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin inserttransaksikendaraan('k-002'); end;
+
+create or replace procedure inserttransaksimodal(idm in varchar)
+IS
+ cursor e_data is 
+select id_usaha,tgl_survey+3 as tgl_kedatangan,add_months(tgl_survey+3,tenor) as tanggal_jatuhtempo,kebutuhan_modal*95/100 as tafsir_harga from modal_usaha where id_usaha = idm;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+insert into transaksi (pengajuan_idm,tanggal_kredit,tanggal_jatuhtempo,tafsir_harga) 
+values (e_rec.id_usaha,e_rec.tgl_kedatangan,e_rec.tanggal_jatuhtempo,e_rec.tafsir_harga);
+   dbms_output.put_line('data transaksi gadai berhasil ditambahkan');
+   dbms_output.put_line('ID PENGAJUAN : '||e_rec.id_usaha);
+   dbms_output.put_line('TANGGAL KREDIT : '||e_rec.tgl_kedatangan);
+   dbms_output.put_line('TANGGAL JATUH TEMPO : '||e_rec.tanggal_jatuhtempo);
+   dbms_output.put_line('TAFSIR HARGA : '||to_char(e_rec.tafsir_harga, '99,999,999,999.99'));
+   
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin inserttransaksimodal('m-003'); end;
+
 
 
 
