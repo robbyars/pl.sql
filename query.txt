@@ -1,0 +1,302 @@
+//insert query cabang
+insert into cabang values('01','Pelayanan Cengkaren','jalan kemal barat no.10B', '405111','Jakarta Barat','Kalideres','Cengkareng');
+
+insert into cabang values('02','Gg.Ketapang','jalan tss raya', '405112','Jakarta Barat','Tss','Ketapang');
+
+insert into cabang values('03','Pelayanan Grogol','jalan rawa bahagia 10 no.21b', '405113','Jakarta Barat','Grogol','Rawa');
+
+insert into cabang values('04','Kalideres','jalan peta utara no.27', '405114','Jakarta Barat','Kalideres','Peta Utara');
+
+insert into cabang values('05','Pelayanan Meruya','jalan srengseng raya no.8h', '405115','Jakarta Barat','Meruya','Srengseng');
+
+insert into cabang values('06','Tanjung Duren','jalan tanjung duren raya no.65', '405116','Jakarta Barat','Tanjung Duren','Tanjung Duren');
+
+//insert query customer
+insert into custgadai values('1','Robby','laki-laki','Jalan Gelong Baru Selatan','Semarang','01/01/1996','5687976779','robby','081234567890');
+
+
+insert into custgadai values('2','Robert','Laki-laki','Jalan Imam Bonjol','Jakarta','02/05/1997','8729498249','robert','082235674894');
+
+
+insert into custgadai values('3','Annisa','Perempuan','Jalan Pattimura','Depok','06/25/1996','6489893952','nisa','082378935268');
+
+
+insert into custgadai values('4','Andre','Laki-laki','Jalan Hasanuddin','Semarang','09/17/1996','6478259463979','andre','081368283900');
+
+
+//insert gadai usaha
+insert into modal_usaha values ('m-001','11','1','industri','10000000','5000000','2000000','12','PT. Robby Industri','jalan kemal barat','5','11/02/2018');
+
+insert into modal_usaha values ('m-002','14','3','Jasa','100000000','50000000','20000000','24','PT. Robert Jasa','jalan tss raya','6','11/26/2018'); 
+
+insert into modal_usaha values ('m-003','11','6','Perdagangan','1000000','5000000','200000','36','PT. Nisa Perdagangan','jalan rawa bahagia','7','12/05/2018');
+
+insert into modal_usaha values ('m-004','10','4','Perkebunan','20000000','25000000','2000000','12','Perkebunan Andre','jalan peta utara','8','12/17/2018');
+
+
+//data pengajuan gadai elektro dan modal
+
+create or replace procedure getdatamodalusaha
+IS
+ cursor e_data is 
+select a.id_usaha,b.nama,c.nama_cabang,a.jenis_usaha,a.kebutuhan_modal,a.omset,a.laba,a.tenor,a.nama_usaha,a.alamat_usaha,a.lama_usaha,a.tgl_survey 
+from modal_usaha a join custgadai b
+on (a.id_customer = b.id_customer)
+join cabang c
+on (a.id_cabang = c.id_cabang);
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+   dbms_output.put_line('-----------DATA PENGAJUAN MODAL USAHA-----------');
+   dbms_output.put_line('ID PENGAJUAN : '||e_rec.id_usaha);
+   dbms_output.put_line('NAMA : '||e_rec.nama);
+   dbms_output.put_line('KANTOR CABANG : '||e_rec.nama_cabang);
+   dbms_output.put_line('JENIS USAHA : '||e_rec.jenis_usaha);
+   dbms_output.put_line('PENGAJUAN MODAL : '||to_char(e_rec.kebutuhan_modal, '99,999,999,999.99'));
+   dbms_output.put_line('OMSET : '||to_char(e_rec.omset, '99,999,999,999.99'));
+   dbms_output.put_line('LABA : '||to_char(e_rec.laba, '99,999,999,999.99'));
+   dbms_output.put_line('TENOR : '||e_rec.tenor);
+   dbms_output.put_line('NAMA USAHA : '||e_rec.nama_usaha);
+   dbms_output.put_line('ALAMAT USAHA : '||e_rec.alamat_usaha);
+   dbms_output.put_line('LAMA USAHA : '||e_rec.lama_usaha);
+   dbms_output.put_line('TANGGAL SURVEY : '||e_rec.tgl_survey);
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin getdatamodalusaha(); end;
+
+//DISPLAY DATA pengajuan gadai elektronik
+
+create or replace procedure getdatagadaielektronik
+IS
+ cursor e_data is 
+select a.id_elektronik,b.nama,c.nama_cabang,a.merk,a.tipe,a.kondisi,a.tahun_pembuatan,a.harga_jual_saatini,a.foto_agunan,a.tgl_kedatangan 
+from gadai_elektronik a join custgadai b
+on (a.id_customer = b.id_customer)
+join cabang c
+on (a.id_cabang = c.id_cabang);
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+   dbms_output.put_line('-----------DATA PENGAJUAN GADAI ELEKTRONIK-----------');
+   dbms_output.put_line('ID PENGAJUAN : '||e_rec.id_elektronik);
+   dbms_output.put_line('NAMA : '||e_rec.nama);
+   dbms_output.put_line('KANTOR CABANG : '||e_rec.nama_cabang);
+   dbms_output.put_line('MERK BARANG : '||e_rec.merk);
+   dbms_output.put_line('TIPE BARANG : '||e_rec.tipe);
+   dbms_output.put_line('KONDISI BARANG : '||e_rec.kondisi);
+   dbms_output.put_line('TAHUN PEMBUATAN : '||e_rec.tahun_pembuatan);
+   dbms_output.put_line('HARGA JUAL SAAT INI : '||to_char(e_rec.harga_jual_saatini, '99,999,999,999.99'));
+   dbms_output.put_line('FOTO BARANG AGUNAN: '||e_rec.foto_agunan);
+   dbms_output.put_line('TANGGAL DATANG KE KANTOR : '||e_rec.tgl_kedatangan);
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin getdatagadaielektronik(); end;
+
+
+//DISPLAY DATA STRUK BUKTI KREDIT SUDAH APPROVAL
+create or replace procedure getdatastrukkendaraan(cif_number IN NUMBER)
+IS
+ cursor e_data is 
+select b.cif, a.nama_cabang, c.nama, c.alamat, b.tanggal_kredit, b.tanggal_jatuhtempo, b.tafsir_harga, d.jenis_kendaraan||' '||d.tipe||' '||d.tahun_pembuatan||' '||d.no_polisi B
+ from transaksi b join gadai_kendaraan d
+ on (b.pengajuan_idk  = d.id_kendaraan)
+ join cabang a
+ on (d.id_cabang = a.id_cabang)
+ join custgadai c
+ on (d.id_customer = c.id_customer) where b.cif = cif_number;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+   dbms_output.put_line('-------------STRUK BUKTI KREDIT---------------');
+   dbms_output.put_line('NOMOR CIF : '||e_rec.cif);
+   dbms_output.put_line('CABANG : '||e_rec.nama_cabang);
+   dbms_output.put_line('NAMA : '||e_rec.nama);
+   dbms_output.put_line('ALAMAT : '||e_rec.alamat);
+   dbms_output.put_line('TANGGAL KREDIT : '||e_rec.tanggal_kredit);
+   dbms_output.put_line('TANGGAL JATUH TEMPO : '||e_rec.tanggal_jatuhtempo);
+   dbms_output.put_line('TAFSIR HARGA : '||to_char(e_rec.tafsir_harga, '99,999,999,999.99'));
+   dbms_output.put_line('BARANG JAMINAN : '||e_rec.B);
+ end loop;
+END;
+
+begin getdatastrukkendaraan(2); end;
+\\
+
+create or replace procedure getdatastrukmodal(cif_number IN NUMBER)
+IS
+ cursor e_data is 
+select b.cif, a.nama_cabang, c.nama, c.alamat, b.tanggal_kredit, add_monthb.tanggal_kredit, b.tanggal_jatuhtempo, b.tafsir_harga, d.barang_agunan
+ from transaksi b join modal_usaha d
+ on (b.pengajuan_idm  = d.id_usaha)
+ join cabang a
+ on (d.id_cabang = a.id_cabang)
+ join custgadai c
+ on (d.id_customer = c.id_customer) where b.cif = cif_number;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+   dbms_output.put_line('-------------STRUK BUKTI KREDIT---------------');
+   dbms_output.put_line('NOMOR CIF : '||e_rec.cif);
+   dbms_output.put_line('CABANG : '||e_rec.nama_cabang);
+   dbms_output.put_line('NAMA : '||e_rec.nama);
+   dbms_output.put_line('ALAMAT : '||e_rec.alamat);
+   dbms_output.put_line('TANGGAL KREDIT : '||e_rec.tanggal_kredit);
+   dbms_output.put_line('TANGGAL ANGSURAN  : '||e_rec.tanggal_jatuhtempo);
+   dbms_output.put_line('TAFSIR HARGA : '||to_char(e_rec.tafsir_harga, '99,999,999,999.99'));
+   dbms_output.put_line('BARANG JAMINAN : '||e_rec.barang_agunan);
+ end loop;
+END;
+
+begin getdatastrukmodal(24); end;
+\\
+
+create or replace procedure getdatastrukelektronik(cif_number IN NUMBER)
+IS
+ cursor e_data is 
+select b.cif, a.nama_cabang, c.nama, c.alamat, b.tanggal_kredit, b.tanggal_jatuhtempo, b.tafsir_harga, d.merk||' '||d.tipe||' '||d.kondisi||' '||d.tahun_pembuatan B
+ from transaksi b join gadai_elektronik d
+ on (b.pengajuan_ide  = d.id_elektronik)
+ join cabang a
+ on (d.id_cabang = a.id_cabang)
+ join custgadai c
+ on (d.id_customer = c.id_customer) where b.cif = cif_number;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+   dbms_output.put_line('-------------STRUK BUKTI KREDIT---------------');
+   dbms_output.put_line('NOMOR CIF : '||e_rec.cif);
+   dbms_output.put_line('CABANG : '||e_rec.nama_cabang);
+   dbms_output.put_line('NAMA : '||e_rec.nama);
+   dbms_output.put_line('ALAMAT : '||e_rec.alamat);
+   dbms_output.put_line('TANGGAL KREDIT : '||e_rec.tanggal_kredit);
+   dbms_output.put_line('TANGGAL JATUH TEMPO : '||e_rec.tanggal_jatuhtempo);
+   dbms_output.put_line('TAFSIR HARGA : '||to_char(e_rec.tafsir_harga, '99,999,999,999.99'));
+   dbms_output.put_line('BARANG JAMINAN : '||e_rec.B);
+ end loop;
+END;
+
+begin getdatastrukelektronik(22); end;
+\\
+
+create or replace procedure getdatastrukperhiasan(cif_number IN NUMBER)
+IS
+ cursor e_data is 
+select b.cif, a.nama_cabang, c.nama, c.alamat, b.tanggal_kredit, b.tanggal_jatuhtempo, b.tafsir_harga, d.jenis_perhiasan||' '||d.kadar_emas||' karat '||d.berat||' gram ' B
+ from transaksi b join gadai_perhiasan d
+ on (b.pengajuan_idp  = d.id_perhiasan)
+ join cabang a
+ on (d.id_cabang = a.id_cabang)
+ join custgadai c
+ on (d.id_customer = c.id_customer) where b.cif = cif_number;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+   dbms_output.put_line('-------------STRUK BUKTI KREDIT---------------');
+   dbms_output.put_line('NOMOR CIF : '||e_rec.cif);
+   dbms_output.put_line('CABANG : '||e_rec.nama_cabang);
+   dbms_output.put_line('NAMA : '||e_rec.nama);
+   dbms_output.put_line('ALAMAT : '||e_rec.alamat);
+   dbms_output.put_line('TANGGAL KREDIT : '||e_rec.tanggal_kredit);
+   dbms_output.put_line('TANGGAL JATUH TEMPO : '||e_rec.tanggal_jatuhtempo);
+   dbms_output.put_line('TAFSIR HARGA : '||to_char(e_rec.tafsir_harga, '99,999,999,999.99'));
+   dbms_output.put_line('BARANG JAMINAN : '||e_rec.B);
+ end loop;
+END;
+
+begin getdatastrukperhiasan(23); end;
+
+//INSERT DATA PENGAJUAN MODAL USAHA
+insert into transaksi (pengajuan_idm,tanggal_kredit,tanggal_jatuhtempo,tafsir_harga) 
+select id_usaha,tgl_survey+3,add_months(tgl_survey+3,tenor),kebutuhan_modal*95/100 from modal_usaha where id_usaha = 'm-001';
+
+
+//INSERT DATA CICILAN BULAN BARU DAN LANJUTAN
+insert into cicilan(cif,nominal_cicilan,sisa_cicilan,tanggal_cicilan)
+select a.cif,
+round((a.tafsir_harga/b.tenor)+((a.tafsir_harga*(1.5*b.tenor)/100)/b.tenor), 0),
+(a.tafsir_harga+(a.tafsir_harga*(1.5*b.tenor/100)))-round((a.tafsir_harga/b.tenor)+((a.tafsir_harga*(1.5*b.tenor)/100)/b.tenor), 0),
+to_char(sysdate, 'MM/DD/YYYY')
+from transaksi a join modal_usaha b
+on (a.pengajuan_idm = b.id_usaha)
+where a.cif=24 
+
+insert into cicilan(cif,nominal_cicilan,sisa_cicilan,tanggal_cicilan)
+select a.cif,
+round((a.tafsir_harga/b.tenor)+(a.tafsir_harga*(1.5/100)), 0),
+c.sisa_cicilan-round((a.tafsir_harga/b.tenor)+(a.tafsir_harga*(1.5/100)), 0),
+to_char(sysdate, 'MM/DD/YYYY')
+from transaksi a join modal_usaha b
+on (a.pengajuan_idm = b.id_usaha)
+join cicilan c
+on (a.cif = c.cif)
+where c.cif=24 and c.id_cicilan=157
+
+
+
+//CETAK STRUK CICILAN BARU DAN LANJUTAN
+create or replace procedure getdatacicilan(idcicilan in number,nomercif in number,bulanke in number)
+IS
+ cursor e_data is 
+select a.cif,
+round((a.tafsir_harga/b.tenor)+(a.tafsir_harga*(1.5/100)), 0) nominal_cicilan,
+c.sisa_cicilan-round((a.tafsir_harga/b.tenor)+(a.tafsir_harga*(1.5/100)), 0) sisa_cicilan,
+b.tenor tenor,
+to_char(sysdate, 'MM/DD/YYYY') tanggal_cicilan
+from transaksi a join modal_usaha b
+on (a.pengajuan_idm = b.id_usaha)
+join cicilan c
+on (a.cif = c.cif)
+where c.cif=nomercif and c.id_cicilan=idcicilan;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+   dbms_output.put_line('----------- STRUK CICILAN BULAN ke-'||bulanke||'--------');
+   dbms_output.put_line('CIF : '||e_rec.cif);
+   dbms_output.put_line('NOMINAL CICILAN : '||to_char(e_rec.nominal_cicilan, '99,999,999,999.99'));
+   dbms_output.put_line('SISA CICILAN : '||to_char(e_rec.sisa_cicilan, '99,999,999,999.99'));
+   dbms_output.put_line('TANGGAL PEMBAYARAN : '||e_rec.tanggal_cicilan);
+   
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin getdatacicilan(151,24,1); end;
+
+//LANJUTAN
+create or replace procedure getdatacicilan2(idcicilan in number,nomercif in number,bulanke in number)
+IS
+ cursor e_data is 
+select a.cif,
+round((a.tafsir_harga/b.tenor)+((a.tafsir_harga*(1.5*b.tenor)/100)/b.tenor), 0) nominal_cicilan,
+(a.tafsir_harga+(a.tafsir_harga*(1.5*b.tenor/100)))-round((a.tafsir_harga/b.tenor)+((a.tafsir_harga*(1.5*b.tenor)/100)/b.tenor), 0) sisa_cicilan,
+to_char(sysdate, 'MM/DD/YYYY') tanggal_cicilan
+from transaksi a join modal_usaha b
+on (a.pengajuan_idm = b.id_usaha)
+join cicilan c
+on (a.cif = c.cif)
+where a.cif = nomercif and c.id_cicilan=idcicilan;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+   dbms_output.put_line('----------- STRUK CICILAN BULAN ke-'||bulanke||'--------');
+   dbms_output.put_line('CIF : '||e_rec.cif);
+   dbms_output.put_line('NOMINAL CICILAN : '||to_char(e_rec.nominal_cicilan, '99,999,999,999.99'));
+   dbms_output.put_line('SISA CICILAN : '||to_char(e_rec.sisa_cicilan, '99,999,999,999.99'));
+   dbms_output.put_line('TANGGAL PEMBAYARAN : '||e_rec.tanggal_cicilan);
+   
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin getdatacicilan2(147,24,1); end;
+
+
+
+
+
+
+
