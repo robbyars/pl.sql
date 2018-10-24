@@ -266,17 +266,20 @@ END;
 
 begin getdatacicilan(151,24,1); end;
 
-//LANJUTAN
-create or replace procedure getdatacicilan2(idcicilan in number,nomercif in number,bulanke in number)
+//struk cicilan
+create or replace procedure getdatacicil(idcicilan in number, bulanke in number)
 IS
  cursor e_data is 
-select cif,nominal_cicilan,sisa_cicilan,tanggal_cicilan
-from cicilan
-where cif = nomercif and id_cicilan=idcicilan;
+select a.cif,a.nominal_cicilan,a.sisa_cicilan,a.tanggal_cicilan,c.tenor as tenor
+from cicilan a join transaksi b
+on (a.cif = b.cif)
+join modal_usaha c
+on (b.pengajuan_idm = c.id_usaha)
+where id_cicilan=idcicilan;
  e_rec e_data%rowtype;
 BEGIN
  for e_rec in e_data loop
-   dbms_output.put_line('----------- STRUK CICILAN BULAN ke-'||bulanke||'--------');
+   dbms_output.put_line('----------- STRUK CICILAN BULAN ke-'||bulanke||' dari '||e_rec.tenor||' KALI CICILAN ---------');
    dbms_output.put_line('CIF : '||e_rec.cif);
    dbms_output.put_line('NOMINAL CICILAN : '||to_char(e_rec.nominal_cicilan, '99,999,999,999.99'));
    dbms_output.put_line('SISA CICILAN : '||to_char(e_rec.sisa_cicilan, '99,999,999,999.99'));
@@ -286,7 +289,7 @@ BEGIN
  end loop;
 END;
 
-begin getdatacicilan2(147,24,1); end;
+begin getdatacicil(147,1); end;
 
 
 //procedure insert transaksi
