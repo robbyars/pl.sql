@@ -377,7 +377,54 @@ END;
 begin inserttransaksimodal('m-003'); end;
 
 
+//Procedure INSERT Customer
+CREATE OR REPLACE PROCEDURE INSERTcustgadai(  
+p_id custgadai.id_customer%TYPE,  
+p_nama custgadai.nama%TYPE,  
+p_jk custgadai.jk%TYPE,  
+p_alamat custgadai.alamat%TYPE,    
+p_tempat custgadai.tempat_lahir%TYPE,    
+p_tl custgadai.tgl_lahir%TYPE,  
+p_nik custgadai.nik%TYPE,  
+p_email custgadai.email%TYPE,    
+p_hp custgadai.no_hp%TYPE,
+p_pass custgadai.password%TYPE)    
+IS  
+BEGIN  
+INSERT INTO custgadai (id_customer, nama, jk, alamat, tempat_lahir, tgl_lahir, nik, email, no_hp, password)  
+VALUES (p_id, p_nama, p_jk, p_alamat, p_tempat, p_tl, p_nik, p_email, p_hp, p_pass);  
+COMMIT;  
+END;  
+/ 
 
+//Procedure UPDATE Profil Customer
+CREATE OR REPLACE PROCEDURE UPDATEcustgadai (   
+p_nama custgadai.nama%TYPE,  
+p_jk custgadai.jk%TYPE,  
+p_alamat custgadai.alamat%TYPE,    
+p_tempat custgadai.tempat_lahir%TYPE,    
+p_tl custgadai.tgl_lahir%TYPE,  
+p_nik custgadai.nik%TYPE,  
+p_email custgadai.email%TYPE,    
+p_hp custgadai.no_hp%TYPE,
+p_pass custgadai.password%TYPE)  
+IS  
+BEGIN  
+UPDATE custgadai SET NAMA=p_nama, JK=p_jk, ALAMAT=p_alamat WHERE NAMA=p_nama;  
+COMMIT;  
+END;  
+/    
+
+//Procedure UPDATE Password
+CREATE OR REPLACE PROCEDURE UPDATEpasscustgadai (   
+p_id custgadai.id_customer%TYPE,
+p_pass custgadai.password%TYPE)  
+IS  
+BEGIN  
+UPDATE custgadai SET password=p_pass WHERE id_customer=p_id;  
+COMMIT;  
+END;  
+/    
 
 
 
