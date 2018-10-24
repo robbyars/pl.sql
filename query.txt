@@ -426,6 +426,65 @@ COMMIT;
 END;  
 /    
 
+create or replace procedure insertcicilan1(numcif in number)
+IS
+ cursor e_data is 
+select a.cif,
+round((a.tafsir_harga/b.tenor)+((a.tafsir_harga*(1.5*b.tenor)/100)/b.tenor), 0) as nominal_cicilan,
+(a.tafsir_harga+(a.tafsir_harga*(1.5*b.tenor/100)))-round((a.tafsir_harga/b.tenor)+((a.tafsir_harga*(1.5*b.tenor)/100)/b.tenor), 0) as sisa_cicilan,
+to_char(sysdate, 'MM/DD/YYYY') as tanggal_cicilan
+from transaksi a join modal_usaha b
+on (a.pengajuan_idm = b.id_usaha)
+where a.cif=numcif;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+insert into cicilan(cif,nominal_cicilan,sisa_cicilan,tanggal_cicilan)
+values (e_rec.cif,e_rec.nominal_cicilan,e_rec.sisa_cicilan,e_rec.tanggal_cicilan);
+   dbms_output.put_line('data transaksi gadai berhasil ditambahkan');
+   dbms_output.put_line('CIF : '||e_rec.cif);
+   dbms_output.put_line('NOMINAL CICILAN : '||e_rec.nominal_cicilan);
+   dbms_output.put_line('SISA CICILAN : '||e_rec.sisa_cicilan);
+   dbms_output.put_line('TANGGAL BAYAR : '||e_rec.tanggal_cicilan);
+   
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin insertcicilan1(66); end;
+
+create or replace procedure insertcicilan12(numcif in number,idcicilan in number)
+IS
+ cursor e_data is 
+select a.cif,
+round((a.tafsir_harga/b.tenor)+(a.tafsir_harga*(1.5/100)), 0) as nominal_cicilan,
+c.sisa_cicilan-round((a.tafsir_harga/b.tenor)+(a.tafsir_harga*(1.5/100)), 0) as sisa_cicilan,
+to_char(sysdate, 'MM/DD/YYYY') as tanggal_cicilan
+from transaksi a join modal_usaha b
+on (a.pengajuan_idm = b.id_usaha)
+join cicilan c
+on (a.cif = c.cif)
+where c.cif=numcif and c.id_cicilan=idcicilan;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+insert into cicilan(cif,nominal_cicilan,sisa_cicilan,tanggal_cicilan)
+values (e_rec.cif,e_rec.nominal_cicilan,e_rec.sisa_cicilan,e_rec.tanggal_cicilan);
+   dbms_output.put_line('data transaksi gadai berhasil ditambahkan');
+   dbms_output.put_line('CIF : '||e_rec.cif);
+   dbms_output.put_line('NOMINAL CICILAN : '||e_rec.nominal_cicilan);
+   dbms_output.put_line('SISA CICILAN : '||e_rec.sisa_cicilan);
+   dbms_output.put_line('TANGGAL BAYAR : '||e_rec.tanggal_cicilan);
+   
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin insertcicilan12(66,161); end;
+
+
+
+
 
 
 
