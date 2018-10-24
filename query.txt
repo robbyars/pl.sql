@@ -486,7 +486,88 @@ END;
 begin insertcicilan12(66,161); end;
 
 
+//Procedure INSERT Gadai Elektronik
+CREATE OR REPLACE PROCEDURE INSERTgadaielektronik(  
+p_id gadai_elektronik.id_elektronik%TYPE, 
+p_cust gadai_elektronik.id_customer%TYPE,  
+p_cabang gadai_elektronik.id_cabang%TYPE,    
+p_merk gadai_elektronik.merk%TYPE,    
+p_tipe gadai_elektronik.tipe%TYPE,  
+p_kondisi gadai_elektronik.kondisi%TYPE,  
+p_tp gadai_elektronik.tahun_pembuatan%TYPE,    
+p_hj gadai_elektronik.harga_jual_saatini%TYPE,
+p_foto gadai_elektronik.foto_agunan%TYPE,
+p_tk gadai_elektronik.tgl_kedatangan%TYPE)    
+IS  
+BEGIN  
+INSERT INTO gadai_elektronik (id_elektronik, id_customer, id_cabang, merk, tipe, kondisi, tahun_pembuatan, harga_jual_saatini, foto_agunan, tgl_kedatangan)  
+VALUES (p_id, p_cust, p_cabang, p_merk, p_tipe, p_kondisi, p_tp, p_hj, p_foto, p_tk);  
+COMMIT;  
+END;  
+/
 
+//Procedure INSERT Gadai Perhiasan
+CREATE OR REPLACE PROCEDURE INSERTgadaiperhiasan(  
+p_id gadai_perhiasan.id_perhiasan%TYPE, 
+p_cust gadai_perhiasan.id_customer%TYPE,  
+p_cabang gadai_perhiasan.id_cabang%TYPE,    
+p_jp gadai_perhiasan.jenis_perhiasan%TYPE,    
+p_ke gadai_perhiasan.kadar_emas%TYPE,  
+p_berat gadai_perhiasan.berat%TYPE,  
+p_foto gadai_perhiasan.foto_agunan%TYPE,    
+p_tk gadai_perhiasan.tgl_kedatangan%TYPE)    
+IS  
+BEGIN  
+INSERT INTO gadai_perhiasan (id_perhiasan, id_customer, id_cabang, jenis_perhiasan, kadar_emas, berat, foto_agunan, tgl_kedatangan)  
+VALUES (p_id, p_cust, p_cabang, p_jp, p_ke, p_berat, p_foto, p_tk);  
+COMMIT;  
+END;  
+/
+
+//Procedure INSERT Gadai_Kendaraan
+CREATE OR REPLACE PROCEDURE INSERTgadaikendaraan(  
+p_id gadai_kendaraan.id_kendaraan%TYPE, 
+p_cust gadai_kendaraan.id_customer%TYPE,  
+p_cabang gadai_kendaraan.id_cabang%TYPE,    
+p_jk gadai_kendaraan.jenis_kendaraan%TYPE,    
+p_tipe gadai_kendaraan.tipe%TYPE,  
+p_tp gadai_kendaraan.tahun_pembuatan%TYPE,  
+p_hj gadai_kendaraan.harga_jual%TYPE,    
+p_bpkb gadai_kendaraan.no_bpkb%TYPE,
+p_polisi gadai_kendaraan.no_polisi%TYPE,  
+p_stnk gadai_kendaraan.no_stnk%TYPE,  
+p_foto gadai_kendaraan.foto_agunan%TYPE,    
+p_tk gadai_kendaraan.tgl_kedatangan%TYPE)    
+IS  
+BEGIN  
+INSERT INTO gadai_kendaraan (id_kendaraan, id_customer, id_cabang, jenis_kendaraan, tipe, tahun_pembuatan, harga_jual, no_bpkb, no_polisi, no_stnk, foto_agunan, tgl_kedatangan)  
+VALUES (p_id, p_cust, p_cabang, p_jk, p_tipe, p_tp, p_hj, p_bpkb, p_polisi, p_stnk, p_foto, p_tk);  
+COMMIT;  
+END;  
+/
+
+//Procedure INSERT Modal_Usaha
+CREATE OR REPLACE PROCEDURE INSERTmodalusaha(  
+p_id modal_usaha.id_usaha%TYPE, 
+p_cust modal_usaha.id_customer%TYPE,  
+p_cabang modal_usaha.id_cabang%TYPE,    
+p_ju modal_usaha.jenis_usaha%TYPE,    
+p_km modal_usaha.kebutuhan_modal%TYPE,  
+p_omset modal_usaha.omset%TYPE,  
+p_laba modal_usaha.laba%TYPE,    
+p_tenor modal_usaha.tenor%TYPE,
+p_nu modal_usaha.nama_usaha%TYPE,  
+p_au modal_usaha.alamat_usaha%TYPE,  
+p_lu modal_usaha.lama_usaha%TYPE,    
+p_ts modal_usaha.tgl_survey%TYPE,    
+p_ba modal_usaha.barang_agunan%TYPE)    
+IS  
+BEGIN  
+INSERT INTO modal_usaha (id_usaha,  id_customer, id_cabang, jenis_usaha, kebutuhan_modal, omset, laba, tenor, nama_usaha, alamat_usaha, lama_usaha, tgl_survey, barang_agunan)  
+VALUES (p_id, p_cust, p_cabang, p_ju, p_km, p_omset, p_laba, p_tenor, p_nu, p_au, p_lu, p_ts, p_ba);  
+COMMIT;  
+END;  
+/
 
 
 
