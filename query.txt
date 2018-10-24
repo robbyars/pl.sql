@@ -236,36 +236,6 @@ on (a.cif = c.cif)
 where c.cif=24 and c.id_cicilan=157
 
 
-
-//CETAK STRUK CICILAN BARU DAN LANJUTAN
-create or replace procedure getdatacicilan(idcicilan in number,nomercif in number,bulanke in number)
-IS
- cursor e_data is 
-select a.cif,
-round((a.tafsir_harga/b.tenor)+(a.tafsir_harga*(1.5/100)), 0) nominal_cicilan,
-c.sisa_cicilan-round((a.tafsir_harga/b.tenor)+(a.tafsir_harga*(1.5/100)), 0) sisa_cicilan,
-b.tenor tenor,
-to_char(sysdate, 'MM/DD/YYYY') tanggal_cicilan
-from transaksi a join modal_usaha b
-on (a.pengajuan_idm = b.id_usaha)
-join cicilan c
-on (a.cif = c.cif)
-where c.cif=nomercif and c.id_cicilan=idcicilan;
- e_rec e_data%rowtype;
-BEGIN
- for e_rec in e_data loop
-   dbms_output.put_line('----------- STRUK CICILAN BULAN ke-'||bulanke||'--------');
-   dbms_output.put_line('CIF : '||e_rec.cif);
-   dbms_output.put_line('NOMINAL CICILAN : '||to_char(e_rec.nominal_cicilan, '99,999,999,999.99'));
-   dbms_output.put_line('SISA CICILAN : '||to_char(e_rec.sisa_cicilan, '99,999,999,999.99'));
-   dbms_output.put_line('TANGGAL PEMBAYARAN : '||e_rec.tanggal_cicilan);
-   
-   dbms_output.put_line('************************************************');
- end loop;
-END;
-
-begin getdatacicilan(151,24,1); end;
-
 //struk cicilan
 create or replace procedure getdatacicil(idcicilan in number, bulanke in number)
 IS
@@ -292,7 +262,7 @@ END;
 begin getdatacicil(147,1); end;
 
 
-//procedure insert transaksi
+//procedure insert transaksi yang sudah di approv
 create or replace procedure inserttransaksiperhiasan(idp in varchar)
 IS
  cursor e_data is 
@@ -429,6 +399,7 @@ COMMIT;
 END;  
 /    
 
+//insert cicilan modal usaha baru
 create or replace procedure insertcicilan1(numcif in number)
 IS
  cursor e_data is 
@@ -455,6 +426,9 @@ values (e_rec.cif,e_rec.nominal_cicilan,e_rec.sisa_cicilan,e_rec.tanggal_cicilan
 END;
 
 begin insertcicilan1(66); end;
+
+
+//insert cicilan modal usaha lama
 
 create or replace procedure insertcicilan12(numcif in number,idcicilan in number)
 IS
@@ -484,6 +458,63 @@ values (e_rec.cif,e_rec.nominal_cicilan,e_rec.sisa_cicilan,e_rec.tanggal_cicilan
 END;
 
 begin insertcicilan12(66,161); end;
+
+
+//insert cicilan selain modal_usaha baru
+create or replace procedure insertcicilpke(numcif in number)
+IS
+ cursor e_data is 
+select cif,
+round((tafsir_harga/4)+((tafsir_harga*(1.5*4)/100)/4), 0) as nominal_cicilan,
+(tafsir_harga+(tafsir_harga*(1.5*4/100)))-round((tafsir_harga/4)+((tafsir_harga*(1.5*4)/100)/4), 0) as sisa_cicilan,
+to_char(sysdate, 'MM/DD/YYYY') as tanggal_cicilan
+from transaksi 
+where cif=numcif;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+insert into cicilan(cif,nominal_cicilan,sisa_cicilan,tanggal_cicilan)
+values (e_rec.cif,e_rec.nominal_cicilan,e_rec.sisa_cicilan,e_rec.tanggal_cicilan);
+   dbms_output.put_line('data cicilan berhasil ditambahkan');
+   dbms_output.put_line('CIF : '||e_rec.cif);
+   dbms_output.put_line('NOMINAL CICILAN : '||e_rec.nominal_cicilan);
+   dbms_output.put_line('SISA CICILAN : '||e_rec.sisa_cicilan);
+   dbms_output.put_line('TANGGAL BAYAR : '||e_rec.tanggal_cicilan);
+   
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin insertcicilpke(22); end;
+
+
+//insert cicilan selain modal_usaha lama
+create or replace procedure insertcicilanpke12(numcif in number,idcicilan in number)
+IS
+ cursor e_data is 
+select a.cif,
+round((a.tafsir_harga/4)+(a.tafsir_harga*(1.5/100)), 0) as nominal_cicilan,
+b.sisa_cicilan-round((a.tafsir_harga/4)+(a.tafsir_harga*(1.5/100)), 0) as sisa_cicilan,
+to_char(sysdate, 'MM/DD/YYYY') as tanggal_cicilan
+from transaksi a join cicilan b
+on (a.cif = b.cif)
+where b.cif=numcif and b.id_cicilan=idcicilan;
+ e_rec e_data%rowtype;
+BEGIN
+ for e_rec in e_data loop
+insert into cicilan(cif,nominal_cicilan,sisa_cicilan,tanggal_cicilan)
+values (e_rec.cif,e_rec.nominal_cicilan,e_rec.sisa_cicilan,e_rec.tanggal_cicilan);
+   dbms_output.put_line('data cicilan berhasil ditambahkan');
+   dbms_output.put_line('CIF : '||e_rec.cif);
+   dbms_output.put_line('NOMINAL CICILAN : '||e_rec.nominal_cicilan);
+   dbms_output.put_line('SISA CICILAN : '||e_rec.sisa_cicilan);
+   dbms_output.put_line('TANGGAL BAYAR : '||e_rec.tanggal_cicilan);
+   
+   dbms_output.put_line('************************************************');
+ end loop;
+END;
+
+begin insertcicilanpke12(22,163); end;
 
 
 //Procedure INSERT Gadai Elektronik
